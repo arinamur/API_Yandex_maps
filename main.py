@@ -8,16 +8,18 @@ from geocoder import *
 lon, lat = get_ll_coord('Лаврушинский пер., 10, стр. 4, Москва, Россия')
 zoom = 17
 map_file = "map.png"
+types = ['map', 'sat', 'sat,skl']
+ind_type = 0
 
 
 def view_map():
-    global lon, lat, zoom, map_file
+    global lon, lat, zoom, map_file, types, ind_type
 
     api_server = "http://static-maps.yandex.ru/1.x/"
     params = {
         "ll": f"{lon},{lat}",
         "z": zoom,
-        "l": "map"
+        "l": types[ind_type]
     }
     response = requests.get(api_server, params=params)
 
@@ -32,12 +34,14 @@ def view_map():
     pygame.display.flip()
 
 
-def move(event):
-    global zoom
+def update(event):
+    global zoom, ind_type
     if event.key == pygame.K_PAGEUP and zoom < 19:
         zoom += 1
     elif event.key == pygame.K_PAGEDOWN and zoom > 2:
         zoom -= 1
+    elif event.key == pygame.K_t:
+        ind_type = (ind_type + 1) % 3
 
 
 pygame.init()
@@ -48,7 +52,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.KEYDOWN:
-            move(event)
+            update(event)
     view_map()
 pygame.quit()
 
