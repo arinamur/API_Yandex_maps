@@ -1,9 +1,5 @@
 import requests
 
-LAT_STEP = 0.008  # Шаги при движении карты по широте и долготе
-LON_STEP = 0.002
-coord_to_geo = 0.0000428  # Пропорции пиксельных и географических координат.
-
 
 def geocode(address):
     geocoder_api_server = "http://geocode-maps.yandex.ru/1.x/"
