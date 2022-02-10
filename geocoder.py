@@ -9,7 +9,9 @@ def geocode(address):
         "format": "json"}
     response = requests.get(geocoder_api_server, params=geocoder_params)
     if not response:
-        return None, None
+        print("Ошибка выполнения запроса:")
+        print("Http статус:", response.status_code, "(", response.reason, ")")
+        return None
 
     json_response = response.json()
     toponym = json_response["response"]["GeoObjectCollection"][
@@ -19,10 +21,10 @@ def geocode(address):
 
 def get_ll_coord(address):
     toponym = geocode(address)
-
-    toponym_coodrinates = toponym["Point"]["pos"]
-    toponym_longitude, toponym_lattitude = toponym_coodrinates.split(" ")
-    return float(toponym_longitude), float(toponym_lattitude)
+    if toponym:
+        toponym_coodrinates = toponym["Point"]["pos"]
+        toponym_longitude, toponym_lattitude = toponym_coodrinates.split(" ")
+        return float(toponym_longitude), float(toponym_lattitude)
 
 
 def get_ll_span(address):
