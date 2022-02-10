@@ -4,12 +4,24 @@ import sys
 import pygame
 import requests
 
-map_request = "http://static-maps.yandex.ru/1.x/?ll=37.530887,55.703118&spn=0.002,0.002&l=map"
-response = requests.get(map_request)
+from geocoder import *
+from distance import *
+from business import *
+
+api_server = "http://static-maps.yandex.ru/1.x/"
+
+lon, lat = get_ll_coord('Лаврушинский пер., 10, стр. 4, Москва, Россия')
+zoom = 17
+
+params = {
+    "ll": f"{lon},{lat}",
+    "z": zoom,
+    "l": "map"
+}
+response = requests.get(api_server, params=params)
 
 if not response:
     print("Ошибка выполнения запроса:")
-    print(map_request)
     print("Http статус:", response.status_code, "(", response.reason, ")")
     sys.exit(1)
 
